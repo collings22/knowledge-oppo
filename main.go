@@ -26,8 +26,13 @@ func main() {
 	r.HandleFunc("/health-check", HealthCheck).Methods("GET")
 
 	// IMPORTANT: you must specify an OPTIONS method matcher for the middleware to set CORS headers
-	r.HandleFunc("/knowledge-check/{category}", KnowledgeCheckHandler).Methods(http.MethodGet)
+	r.HandleFunc("/knowledge-check/{category}", GetKnowledgeCheckByCategoryHandler).Methods(http.MethodGet)
+	r.HandleFunc("/knowledge-check/{category}/questions", AddQuestionsToKnowledgeCheckCategoryHandler).Methods(http.MethodPost)
+	r.HandleFunc("/knowledge-check/{category}/questions", UpdateQuestionsToKnowledgeCheckCategoryHandler).Methods(http.MethodPut)
+	r.HandleFunc("/knowledge-check/{category}/questions/{id}", DeleteQuestionToKnowledgeCheckCategoryHandler).Methods(http.MethodDelete)
+
 	r.HandleFunc("/knowledge-check/{category}/score", KnowledgeCheckScoreHandler).Methods(http.MethodPost)
+
 	r.Use(mux.CORSMethodMiddleware(r))
 
 	http.Handle("/", r)
@@ -36,7 +41,43 @@ func main() {
 
 }
 
-func KnowledgeCheckHandler(w http.ResponseWriter, r *http.Request) {
+func GetKnowledgeCheckByCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	tmp := []question{}
+	for _, item := range questions {
+		if item.Category == params["category"] {
+			tmp = append(tmp, item)
+		}
+	}
+	json.NewEncoder(w).Encode(&tmp)
+}
+
+func AddQuestionsToKnowledgeCheckCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	tmp := []question{}
+	for _, item := range questions {
+		if item.Category == params["category"] {
+			tmp = append(tmp, item)
+		}
+	}
+	json.NewEncoder(w).Encode(&tmp)
+}
+
+func UpdateQuestionsToKnowledgeCheckCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	tmp := []question{}
+	for _, item := range questions {
+		if item.Category == params["category"] {
+			tmp = append(tmp, item)
+		}
+	}
+	json.NewEncoder(w).Encode(&tmp)
+}
+
+func DeleteQuestionToKnowledgeCheckCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	tmp := []question{}
