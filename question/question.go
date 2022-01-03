@@ -60,6 +60,18 @@ var questions = []question{
 	},
 }
 
+func GetQuestionsByCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	tmp := []question{}
+	for _, item := range questions {
+		if item.Category == params["category"] {
+			tmp = append(tmp, item)
+		}
+	}
+	json.NewEncoder(w).Encode(&tmp)
+}
+
 func AddQuestionsToKnowledgeCheckCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
