@@ -60,6 +60,14 @@ var questions = []question{
 	},
 }
 
+func RoutesHandler(r *mux.Router) {
+	// IMPORTANT: you must specify an OPTIONS method matcher for the middleware to set CORS headers
+	r.HandleFunc("/knowledge-check/{category}", GetQuestionsByCategoryHandler).Methods("GET")
+	r.HandleFunc("/knowledge-check/{category}/questions", AddQuestionsToKnowledgeCheckCategoryHandler).Methods("POST")
+	r.HandleFunc("/knowledge-check/{category}/questions", UpdateQuestionsToKnowledgeCheckCategoryHandler).Methods("PUT")
+	r.HandleFunc("/knowledge-check/{category}/questions/{id}", DeleteQuestionToKnowledgeCheckCategoryHandler).Methods("DELETE")
+}
+
 func GetQuestionsByCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
